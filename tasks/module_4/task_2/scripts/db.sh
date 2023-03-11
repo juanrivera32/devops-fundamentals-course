@@ -69,6 +69,7 @@ function restore {
     echo "No backup file found"
   else
     cat $backupFile > $filePath
+    echo "$backupFile restored correctly"
   fi 
 }
 
@@ -112,6 +113,7 @@ function help {
         username of new entity. After entering username, user must be prompted to
        	type a role." 
   echo "backup  Creates a new file, named  "$filePath".backup which is a copy of current " $fileName
+  echo "restore Takes the last created backup file and replaces users.db with it"
   echo "find    Prompts user to type a username, then prints username and role if such
         exists in users.db. If there is no user with selected username, script must print:
         “User not found”. If there is more than one user with such username, print all
