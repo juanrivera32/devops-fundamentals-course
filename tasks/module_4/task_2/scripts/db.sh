@@ -89,7 +89,6 @@ function find {
   
 }
 
-echo $2
 inverseParam="$2"
 function list {
     if [[ $inverseParam == "--inverse" ]]
