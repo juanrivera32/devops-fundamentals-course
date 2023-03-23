@@ -59,27 +59,22 @@ done
 branch="${branch:=main}"
 pollForSourceChanges="${pollForSourceChanges:=false}"
 
-echo ">>>>>> $pollForSourceChanges"
-
-echo "Creating copy of pipeline.json file"
-echo ""
-
 new_json_file="../pipeline$(date +%F_%H-%M-%S).json"
-# touch $new_json_file
-# cp ../pipeline.json $current_json
 
 # Remove metadata from file
-# jq '. |= del(.metadata)' $current_json >> $new_json_file
-
+temp_json=$(jq '. |= del(.metadata)' $current_json)
 # Increment version by one
-# jq '. |= del(.metadata) | .pipeline.version |= . + 1' $current_json >> $new_json_file
+temp_json=$(echo $temp_json | jq '.pipeline.version |= . + 1')
+# Set branch name
+temp_json=$(echo $temp_json | jq --arg branch $branch '.pipeline.stages[0].actions[0].configuration.Branch |= $branch')
+# Set owner property
+temp_json=$(echo $temp_json | jq --arg owner $owner '.pipeline.stages[0].actions[0].configuration.Owner |= $owner')
+# Set PollForSourceChanges
+temp_json=$(echo $temp_json | jq --arg pollForSourceChanges $pollForSourceChanges '.pipeline.stages[0].actions[0].configuration.PollForSourceChanges |= $pollForSourceChanges')
+# Set build configuration env var
+temp_json=$(echo $temp_json | jq --argjson env "{ \"BUILD_CONFIGURATION\": \"$configuration\" }" '.pipeline.stages[].actions[].configuration.EnvironmentVariables=$env')
 
-# jq '.. | .EnvironmentVariables?'
-# jq '(.. | .configuration?.EnvironmentVariables?) |= "XXXX"' $current_json
-
-# jq --arg configuration $configuration '.. | .EnvironmentVariables? | select(. != null) | gsub("{{BUILD_CONFIGURATION value}}";$configuration)' $current_json
-
-
-jq --arg configuration $configuration --arg branch $branch --arg owner $owner --arg pollForSourceChanges $pollForSourceChanges '. |= del(.metadata) | .pipeline.version |= . + 1 | .pipeline.stages[0].actions[0].configuration.Branch |= $branch | .pipeline.stages[0].actions[0].configuration.Owner |= $owner | .pipeline.stages[0].actions[0].configuration.PollForSourceChanges |= $pollForSourceChanges | .. | .EnvironmentVariables? | select(. != null) | sub("{{BUILD_CONFIGURATION value}}";$configuration)' $current_json >> $new_json_file
+# Prettify JSON
+echo $temp_json | jq '.' >> $new_json_file
 
 

@@ -24,7 +24,10 @@
               "OAuthToken": "****",
               "Owner": "juanrivera32",
               "PollForSourceChanges": "true",
-              "Repo": "shop-angular-cloudfront"
+              "Repo": "shop-angular-cloudfront",
+              "EnvironmentVariables": {
+                "BUILD_CONFIGURATION": "production"
+              }
             },
             "outputArtifacts": [
               {
@@ -50,7 +53,9 @@
             },
             "runOrder": 1,
             "configuration": {
-              "EnvironmentVariables": "[{\"name\":\"BUILD_CONFIGURATION\",\"value\":\"{{BUILD_CONFIGURATION value}}\",\"type\":\"PLAINTEXT\"}]",
+              "EnvironmentVariables": {
+                "BUILD_CONFIGURATION": "production"
+              },
               "ProjectName": "client-app-quality"
             },
             "outputArtifacts": [],
@@ -76,7 +81,10 @@
             },
             "runOrder": 1,
             "configuration": {
-              "CustomData": "Approve me"
+              "CustomData": "Approve me",
+              "EnvironmentVariables": {
+                "BUILD_CONFIGURATION": "production"
+              }
             },
             "outputArtifacts": [],
             "inputArtifacts": [],
@@ -97,7 +105,9 @@
             },
             "runOrder": 1,
             "configuration": {
-              "EnvironmentVariables": "[{\"name\":\"BUILD_CONFIGURATION\",\"value\":\"{{BUILD_CONFIGURATION value}}\",\"type\":\"PLAINTEXT\"}]",
+              "EnvironmentVariables": {
+                "BUILD_CONFIGURATION": "production"
+              },
               "ProjectName": "client-app-build"
             },
             "outputArtifacts": [
